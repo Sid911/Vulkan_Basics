@@ -3,6 +3,8 @@ project(VulBasics VERSION 0.1 LANGUAGES CXX)
 
 find_package(Vulkan REQUIRED)
 
+option(COMPILE_SHADER "Compile shaders also" OFF)
+
 function(add_shaders TARGET_NAME)
   set(SHADER_SOURCE_FILES ${ARGN}) # the rest of arguments to this function will be assigned as shader source files
   
@@ -43,6 +45,10 @@ set(CMAKE_CXX_FLAGS "$CMAKE_CXX_FLAGS -O3 -march=native")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(VulBasics main.cpp helper.hpp)
-add_shaders(Shaders shaders/shader_f.frag shaders/shader_v.vert)
+
+if(COMPILE_SHADER)
+  add_shaders(Shaders shaders/shader_f.frag shaders/shader_v.vert)
+endif()
+
 target_compile_features(VulBasics PUBLIC cxx_std_23)
 target_link_libraries(VulBasics PUBLIC glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi)
